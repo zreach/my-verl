@@ -17,7 +17,7 @@ set -xeuo pipefail
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${PROJECT_DIR}"
 
-CONDA_ENV="${CONDA_ENV:-zhouyz}"
+CONDA_ENV="${CONDA_ENV:-va}"
 CONDA_RUN=(conda run --no-capture-output -n "${CONDA_ENV}")
 
 MODEL_PATH="${MODEL_PATH:-Qwen/Qwen3-8B}"
