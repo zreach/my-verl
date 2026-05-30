@@ -5,7 +5,6 @@
 #   MODEL_PATH=/path/to/model AIME_PARQUET=/path/to/aime.parquet bash examples/code_tool/run_aime_code_tool_eval.sh
 #
 # Optional knobs:
-#   CONDA_ENV=zhouyz
 #   LIMIT=8
 #   INFER_BACKEND=vllm
 #   TOOL_FORMAT=qwen3_coder
@@ -29,6 +28,7 @@ DATA_DIR="${DATA_DIR:-${WORK_DIR}/data}"
 TOOL_CONFIG_PATH="${TOOL_CONFIG_PATH:-${WORK_DIR}/code_tool_config.yaml}"
 RAW_AIME_DIR="${RAW_AIME_DIR:-${DATA_DIR}/raw_aime2024}"
 PREPARED_AIME_PARQUET="${PREPARED_AIME_PARQUET:-${DATA_DIR}/aime_code_tool.parquet}"
+VALIDATION_DATA_DIR="${VALIDATION_DATA_DIR:-${WORK_DIR}/validation_generations}"
 
 NGPUS_PER_NODE="${NGPUS_PER_NODE:-1}"
 ROLLOUT_TP="${ROLLOUT_TP:-1}"
@@ -38,8 +38,11 @@ VAL_BATCH_SIZE="${VAL_BATCH_SIZE:-${LIMIT}}"
 LOG_PROB_MICRO_BATCH_SIZE_PER_GPU="${LOG_PROB_MICRO_BATCH_SIZE_PER_GPU:-1}"
 MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-4096}"
 MAX_RESPONSE_LENGTH="${MAX_RESPONSE_LENGTH:-4096}"
+ROLLOUT_MAX_MODEL_LEN="${ROLLOUT_MAX_MODEL_LEN:-$((MAX_PROMPT_LENGTH + MAX_RESPONSE_LENGTH))}"
 MAX_NUM_BATCHED_TOKENS="${MAX_NUM_BATCHED_TOKENS:-8192}"
-GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.6}"
+GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.45}"
+ROLLOUT_ENFORCE_EAGER="${ROLLOUT_ENFORCE_EAGER:-True}"
+ROLLOUT_ENABLE_PREFIX_CACHING="${ROLLOUT_ENABLE_PREFIX_CACHING:-False}"
 MAX_TOOL_RESPONSE_LENGTH="${MAX_TOOL_RESPONSE_LENGTH:-2048}"
 CODE_TIMEOUT="${CODE_TIMEOUT:-10}"
 
@@ -142,6 +145,9 @@ PY
     actor_rollout_ref.rollout.gpu_memory_utilization="${GPU_MEMORY_UTILIZATION}" \
     actor_rollout_ref.rollout.n="${ROLLOUT_N}" \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu="${LOG_PROB_MICRO_BATCH_SIZE_PER_GPU}" \
+    actor_rollout_ref.rollout.enforce_eager="${ROLLOUT_ENFORCE_EAGER}" \
+    actor_rollout_ref.rollout.enable_prefix_caching="${ROLLOUT_ENABLE_PREFIX_CACHING}" \
+    actor_rollout_ref.rollout.max_model_len="${ROLLOUT_MAX_MODEL_LEN}" \
     actor_rollout_ref.rollout.max_num_batched_tokens="${MAX_NUM_BATCHED_TOKENS}" \
     actor_rollout_ref.rollout.multi_turn.enable=True \
     actor_rollout_ref.rollout.multi_turn.tool_config_path="${TOOL_CONFIG_PATH}" \
@@ -157,6 +163,7 @@ PY
     trainer.nnodes=1 \
     trainer.val_before_train=True \
     trainer.val_only=True \
+    trainer.validation_data_dir="${VALIDATION_DATA_DIR}" \
     trainer.test_freq=-1 \
     trainer.save_freq=-1 \
     "$@"
