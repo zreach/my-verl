@@ -19,7 +19,7 @@ cd "${PROJECT_DIR}"
 CONDA_ENV="${CONDA_ENV:-va}"
 CONDA_RUN=(conda run --no-capture-output -n "${CONDA_ENV}")
 
-MODEL_PATH="${MODEL_PATH:-Qwen/Qwen3-8B}"
+MODEL_PATH="${MODEL_PATH:-/workspace/hf/Qwen3-1.7B}"
 INFER_BACKEND="${INFER_BACKEND:-vllm}"
 TOOL_FORMAT="${TOOL_FORMAT:-qwen3_coder}"
 LIMIT="${LIMIT:-8}"
