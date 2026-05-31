@@ -19,7 +19,7 @@ cd "${PROJECT_DIR}"
 CONDA_ENV="${CONDA_ENV:-va}"
 CONDA_RUN=(conda run --no-capture-output -n "${CONDA_ENV}")
 
-MODEL_PATH="${MODEL_PATH:-/workspace/hf/Qwen3-1.7B}"
+MODEL_PATH="${MODEL_PATH:-/workspace/hf/QwQ-32B}"
 INFER_BACKEND="${INFER_BACKEND:-vllm}"
 TOOL_FORMAT="${TOOL_FORMAT:-qwen3_coder}"
 PROJECT_NAME="${PROJECT_NAME:-aime_code_tool_smoke}"
