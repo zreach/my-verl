@@ -19,7 +19,7 @@ cd "${PROJECT_DIR}"
 CONDA_ENV="${CONDA_ENV:-va}"
 CONDA_RUN=(conda run --no-capture-output -n "${CONDA_ENV}")
 
-MODEL_PATH="${MODEL_PATH:-/workspace/hf/QwQ-32B}"
+MODEL_PATH="${MODEL_PATH:-/workspace/hf/Qwen/QwQ-32B}"
 INFER_BACKEND="${INFER_BACKEND:-vllm}"
 TOOL_FORMAT="${TOOL_FORMAT:-qwen3_coder}"
 PROJECT_NAME="${PROJECT_NAME:-aime_code_tool_smoke}"
@@ -35,7 +35,7 @@ SYSTEM_PROMPT_PATH="${SYSTEM_PROMPT_PATH:-${PROJECT_DIR}/examples/code_tool/syst
 TENSORBOARD_DIR="${TENSORBOARD_DIR:-${WORK_DIR}/tensorboard/${PROJECT_NAME}/${EXPERIMENT_NAME}}"
 TRAINER_LOGGER="${TRAINER_LOGGER:-'[\"console\",\"tensorboard\"]'}"
 
-NGPUS_PER_NODE="${NGPUS_PER_NODE:-1}"
+NGPUS_PER_NODE="${NGPUS_PER_NODE:-8}"
 ROLLOUT_TP="${ROLLOUT_TP:-1}"
 ROLLOUT_N="${ROLLOUT_N:-1}"
 TRAIN_BATCH_SIZE="${TRAIN_BATCH_SIZE:-${LIMIT}}"
