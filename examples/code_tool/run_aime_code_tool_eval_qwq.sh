@@ -7,7 +7,7 @@
 # Optional knobs:
 #   LIMIT=8
 #   INFER_BACKEND=vllm
-#   TOOL_FORMAT=qwen3_coder
+#   TOOL_FORMAT=hermes
 #   NGPUS_PER_NODE=1
 #   ROLLOUT_TP=1
 
@@ -21,7 +21,7 @@ CONDA_RUN=(conda run --no-capture-output -n "${CONDA_ENV}")
 
 MODEL_PATH="${MODEL_PATH:-/workspace/hf/Qwen/QwQ-32B}"
 INFER_BACKEND="${INFER_BACKEND:-vllm}"
-TOOL_FORMAT="${TOOL_FORMAT:-qwen3_coder}"
+TOOL_FORMAT="${TOOL_FORMAT:-hermes}"
 PROJECT_NAME="${PROJECT_NAME:-aime_code_tool_smoke}"
 EXPERIMENT_NAME="${EXPERIMENT_NAME:-aime_code_tool_qwq}"
 LIMIT="${LIMIT:-8}"
@@ -31,7 +31,7 @@ TOOL_CONFIG_PATH="${TOOL_CONFIG_PATH:-${WORK_DIR}/code_tool_config.yaml}"
 RAW_AIME_DIR="${RAW_AIME_DIR:-${DATA_DIR}/raw_aime2024}"
 PREPARED_AIME_PARQUET="${PREPARED_AIME_PARQUET:-${DATA_DIR}/aime_code_tool.parquet}"
 VALIDATION_DATA_DIR="${VALIDATION_DATA_DIR:-${WORK_DIR}/validation_generations}"
-SYSTEM_PROMPT_PATH="${SYSTEM_PROMPT_PATH:-${PROJECT_DIR}/examples/code_tool/system_prompt.txt}"
+SYSTEM_PROMPT_PATH="${SYSTEM_PROMPT_PATH:-${PROJECT_DIR}/examples/code_tool/system_prompt_qwq.txt}"
 TENSORBOARD_DIR="${TENSORBOARD_DIR:-${WORK_DIR}/tensorboard/${PROJECT_NAME}/${EXPERIMENT_NAME}}"
 TRAINER_LOGGER="${TRAINER_LOGGER:-[console,tensorboard]}"
 
