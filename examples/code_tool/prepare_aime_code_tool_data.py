@@ -21,11 +21,25 @@ from typing import Any
 import pandas as pd
 
 
-def prepend_system_prompt(prompt: Any, system_prompt: str) -> Any:
+def _as_messages(prompt: Any) -> list[dict[str, Any]] | None:
     if not isinstance(prompt, list):
+        if isinstance(prompt, tuple):
+            prompt = list(prompt)
+        elif hasattr(prompt, "tolist"):
+            prompt = prompt.tolist()
+        else:
+            return None
+
+    if not isinstance(prompt, list):
+        return None
+    return prompt
+
+
+def prepend_system_prompt(prompt: Any, system_prompt: str) -> Any:
+    messages = _as_messages(prompt)
+    if messages is None:
         return prompt
 
-    messages = list(prompt)
     if messages and messages[0].get("role") == "system":
         messages[0] = {
             **messages[0],
@@ -49,6 +63,12 @@ def main() -> None:
 
     df = pd.read_parquet(source)
     df["prompt"] = df["prompt"].apply(lambda prompt: prepend_system_prompt(prompt, system_prompt))
+    injected = df["prompt"].apply(
+        lambda prompt: bool(_as_messages(prompt)) and _as_messages(prompt)[0].get("role") == "system"
+    )
+    if not injected.all():
+        bad_count = int((~injected).sum())
+        raise ValueError(f"Failed to inject system prompt into {bad_count} row(s); unsupported prompt format.")
 
     target.parent.mkdir(parents=True, exist_ok=True)
     df.to_parquet(target)
