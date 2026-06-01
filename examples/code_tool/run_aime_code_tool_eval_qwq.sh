@@ -54,10 +54,9 @@ FSDP_SIZE="${FSDP_SIZE:-${NGPUS_PER_NODE}}"
 SP_SIZE="${SP_SIZE:-1}"
 MAX_TOOL_RESPONSE_LENGTH="${MAX_TOOL_RESPONSE_LENGTH:-2048}"
 CODE_TIMEOUT="${CODE_TIMEOUT:-10}"
-PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 mkdir -p "${WORK_DIR}" "${DATA_DIR}" "${RAW_AIME_DIR}"
-export TENSORBOARD_DIR PYTORCH_CUDA_ALLOC_CONF
+export TENSORBOARD_DIR
 
 cat > "${TOOL_CONFIG_PATH}" <<EOF
 tools:
@@ -120,13 +119,6 @@ fi
     actor_rollout_ref.actor.fsdp_config.ulysses_sequence_parallel_size="${SP_SIZE}" \
     actor_rollout_ref.actor.fsdp_config.param_offload=True \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=True \
-    actor_rollout_ref.ref.strategy=fsdp2 \
-    actor_rollout_ref.ref.use_torch_compile=False \
-    actor_rollout_ref.ref.fsdp_config.param_offload=True \
-    actor_rollout_ref.ref.fsdp_config.reshard_after_forward=True \
-    actor_rollout_ref.ref.fsdp_config.offload_policy=True \
-    actor_rollout_ref.ref.fsdp_config.ulysses_sequence_parallel_size="${SP_SIZE}" \
-    actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu="${LOG_PROB_MICRO_BATCH_SIZE_PER_GPU}" \
     actor_rollout_ref.rollout.mode=async \
     actor_rollout_ref.rollout.name="${INFER_BACKEND}" \
     actor_rollout_ref.rollout.tensor_model_parallel_size="${ROLLOUT_TP}" \
